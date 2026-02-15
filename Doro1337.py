@@ -94,10 +94,10 @@ class StatsManager:
         if os.path.exists("stats.json"): 
             try: self.data = json.load(open("stats.json"))
             except: pass
-    def save(self):
+def save(self):
     with g_state["lock"]:
         json.dump(self.data, open("stats.json", "w"))
-
+        
 def update(self, k):
     with g_state["lock"]:
         self.data[k] += 1
