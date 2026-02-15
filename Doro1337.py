@@ -434,11 +434,11 @@ def main():
     for i in instances: threading.Thread(target=i.loop, daemon=True).start()
 
     try:
+        
         with Live(make_layout(instances), refresh_per_second=2, screen=True) as live:
-            while g_state["running"]:
-       
-       live.update(make_layout(instances))
-                time.sleep(0.5)
+    while g_state["running"]:
+        live.update(make_layout(instances))
+        time.sleep(0.5)
     except KeyboardInterrupt:
         g_state["running"] = False
         stats.save(); root_shell.exec("pkill logcat")
