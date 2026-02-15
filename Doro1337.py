@@ -89,22 +89,28 @@ class KernelShell:
 root_shell = KernelShell()
 
 class StatsManager:
-    def __init__(self): self.data = {"rejoins": 0, "crashes": 0, "err_277": 0, "err_279": 0}; self.load()
-    def load(self): 
-        if os.path.exists("stats.json"): 
-            try: self.data = json.load(open("stats.json"))
-            except: pass
-def save(self):
-    with g_state["lock"]:
-        json.dump(self.data, open("stats.json", "w"))
-        
-def update(self, k):
-    with g_state["lock"]:
-        self.data[k] += 1
+    def __init__(self):
+        self.data = {"rejoins": 0, "crashes": 0, "err_277": 0, "err_279": 0}
+        self.load()
 
-def get_snapshot(self):
-    with g_state["lock"]:
-        return self.data.copy()
+    def load(self):
+        if os.path.exists("stats.json"):
+            try:
+                self.data = json.load(open("stats.json"))
+            except:
+                pass
+
+    def save(self):
+        with g_state["lock"]:
+            json.dump(self.data, open("stats.json", "w"))
+
+    def update(self, k):
+        with g_state["lock"]:
+            self.data[k] += 1
+
+    def get_snapshot(self):
+        with g_state["lock"]:
+            return self.data.copy()
 
 stats = StatsManager()
 
@@ -142,7 +148,8 @@ class SingularityAggregator(threading.Thread):
                 d_tot = c_tot - self.prev_global_total; d_idl = c_idl - self.prev_global_idle
                 self.prev_global_total = c_tot; self.prev_global_idle = c_idl
                 
-                mt = int(re.search(r'\d+', glb[1]).group()); m = re.search(r'MemAvailable:\s+(\d+)', glb[1])
+                mt = int(re.search(r'\d+', glb[1]).group())
+m = re.search(r'MemAvailable:\s+(\d+)', glb[1])
 ma = int(m.group(1)) if m else 0
                 
                 pkg_m = defaultdict(lambda: {"c":0, "r":0, "pids":[]})
